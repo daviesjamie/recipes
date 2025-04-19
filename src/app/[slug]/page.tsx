@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: Props) {
   }
 
   return {
-    title: recipe.slug,
+    title: recipe.name,
   };
 }
 
@@ -35,8 +35,8 @@ export default async function Recipe({ params }: Props) {
 
   return (
     <article>
-      <h1>{recipe.slug}</h1>
-      <pre>{recipe.content}</pre>
+      <h1>{recipe.name}</h1>
+      <pre>{JSON.stringify(recipe, null, 2)}</pre>
     </article>
   );
 }

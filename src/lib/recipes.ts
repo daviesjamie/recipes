@@ -1,13 +1,13 @@
 import { promises as fs } from "fs";
 import { promisify } from "util";
 import { exec } from "child_process";
+import { RecipeSchema, type Recipe } from "./schema";
 
-const pexec = promisify(exec);
-
-type Recipe = {
-  content: string;
+type RecipeWithSlug = Recipe & {
   slug: string;
 };
+
+const pexec = promisify(exec);
 
 const RECIPES_BASE_PATH = "recipes";
 
@@ -22,26 +22,25 @@ function calculateSlug(path: string): string {
     .replace(/\.cook$/, "");
 }
 
-export async function getRecipe(
-  recipePath: string,
-): Promise<Recipe | undefined> {
-  const jsonOutput = await pexec(`chef recipe ${recipePath} --format json`);
+export async function getRecipe(recipePath: string): Promise<RecipeWithSlug> {
+  const output = await pexec(`chef recipe ${recipePath} --format json`);
+  const recipe = RecipeSchema.parse(JSON.parse(output.stdout.trim()));
+  const slug = calculateSlug(recipePath);
+
   return {
-    content: jsonOutput.stdout.trim(),
-    slug: calculateSlug(recipePath),
+    ...recipe,
+    slug,
   };
 }
 
-export async function getRecipes(): Promise<Recipe[]> {
+export async function getRecipes(): Promise<RecipeWithSlug[]> {
   const recipePaths = await getRecipePaths();
-  const recipes: Recipe[] = [];
+  const recipes: RecipeWithSlug[] = [];
 
   await Promise.all(
     recipePaths.map(async (recipePath) => {
       const recipe = await getRecipe(recipePath);
-      if (recipe) {
-        recipes.push(recipe);
-      }
+      recipes.push(recipe);
     }),
   );
 

@@ -12,7 +12,7 @@ export default async function RecipeList() {
           .sort((a, b) => a.slug.localeCompare(b.slug))
           .map((recipe) => (
             <li key={recipe.slug}>
-              <Link href={recipe.slug}>{recipe.slug}</Link>
+              <Link href={recipe.slug}>{recipe.name}</Link>
             </li>
           ))}
       </ul>

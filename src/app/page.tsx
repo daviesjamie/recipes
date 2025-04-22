@@ -5,17 +5,22 @@ export default async function RecipeList() {
   const recipes = await getRecipes();
 
   return (
-    <main>
-      <h1>Recipes</h1>
-      <ul>
-        {recipes
-          .sort((a, b) => a.slug.localeCompare(b.slug))
-          .map((recipe) => (
-            <li key={recipe.slug}>
-              <Link href={recipe.slug}>{recipe.name}</Link>
-            </li>
-          ))}
-      </ul>
-    </main>
+    <ul>
+      {recipes
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .map((recipe) => (
+          <li
+            key={recipe.slug}
+            className="pl-6 text-sm before:absolute before:-ml-6 before:content-['•']"
+          >
+            <Link
+              href={recipe.slug}
+              className="font-semibold hover:underline active:underline"
+            >
+              {recipe.name}
+            </Link>
+          </li>
+        ))}
+    </ul>
   );
 }

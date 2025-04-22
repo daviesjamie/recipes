@@ -2,6 +2,7 @@ import "@/styles/globals.css";
 
 import { type Metadata } from "next";
 import { Geist } from "next/font/google";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "jagd's Recipes",
@@ -19,7 +20,14 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${geist.variable}`}>
-      <body>{children}</body>
+      <body className="px-16 py-24">
+        <header className="mx-auto mb-6 max-w-xl border-b-2 border-gray-950 pb-2">
+          <Link href="/">
+            <h2 className="text-3xl">{"jagd's Recipes"}</h2>
+          </Link>
+        </header>
+        <main className="mx-auto max-w-xl">{children}</main>
+      </body>
     </html>
   );
 }

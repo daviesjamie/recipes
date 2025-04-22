@@ -1,9 +1,10 @@
 import { promises as fs } from "fs";
 import { promisify } from "util";
 import { exec } from "child_process";
-import { RecipeSchema, type Recipe } from "./schema";
+import type { z } from "zod";
+import { Recipe } from "./schema";
 
-type RecipeWithSlug = Recipe & {
+type RecipeWithSlug = z.infer<typeof Recipe> & {
   slug: string;
 };
 
@@ -24,7 +25,7 @@ function calculateSlug(path: string): string {
 
 export async function getRecipe(recipePath: string): Promise<RecipeWithSlug> {
   const output = await pexec(`chef recipe ${recipePath} --format json`);
-  const recipe = RecipeSchema.parse(JSON.parse(output.stdout.trim()));
+  const recipe = Recipe.parse(JSON.parse(output.stdout.trim()));
   const slug = calculateSlug(recipePath);
 
   return {

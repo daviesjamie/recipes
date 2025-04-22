@@ -103,7 +103,7 @@ const Modifiers = z.preprocess(
   z.nullable(z.enum(["RECIPE", "REF", "HIDDEN", "OPT", "NEW"])),
 );
 
-const Ingredient = z.object({
+export const Ingredient = z.object({
   name: z.string(),
   alias: z.string().nullable(),
   quantity: Quantity.nullable(),
@@ -153,7 +153,7 @@ const Scaled = z.discriminatedUnion("type", [
   }),
 ]);
 
-export const RecipeSchema = z.object({
+export const Recipe = z.object({
   name: z.string(),
   metadata: Metadata,
   sections: z.array(Section),
@@ -163,5 +163,3 @@ export const RecipeSchema = z.object({
   inline_quantities: z.array(ScaledQuantity),
   data: Scaled,
 });
-
-export type Recipe = z.infer<typeof RecipeSchema>;

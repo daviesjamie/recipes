@@ -1,3 +1,5 @@
+import IngredientList from "@/components/ingredient-list";
+import { H1 } from "@/components/typography";
 import { getRecipe, getRecipes } from "@/lib/recipes";
 import { notFound } from "next/navigation";
 
@@ -35,7 +37,8 @@ export default async function Recipe({ params }: Props) {
 
   return (
     <article>
-      <h1>{recipe.name}</h1>
+      <H1>{recipe.name}</H1>
+      <IngredientList ingredients={recipe.ingredients} />
       <pre>{JSON.stringify(recipe, null, 2)}</pre>
     </article>
   );
